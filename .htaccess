@@ -1,0 +1,17 @@
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Verifique se o arquivo ou diretório não existe antes do redirecionamento
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    
+    # Redireciona todas as requisições para index.php
+    RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+</IfModule>
+
+# Desabilitar a listagem de diretórios
+Options -Indexes
+
+# Definir o índice padrão
+DirectoryIndex index.php
