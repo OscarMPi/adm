@@ -40,17 +40,33 @@ class ListAccessLevels
 
         $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
+        // Check for GET parameters (from URL)
         $this->searchName = filter_input(INPUT_GET, 'search_name', FILTER_DEFAULT);
 
         $listAccessLevels = new \App\adms\Models\AdmsListAccessLevels();
-        if (!empty($this->dataForm['SendSearchAccessLevels'])) {
+
+        // Check if search is from navbar global search
+        if (!empty($this->dataForm['SendSearchAccessLevels']) && isset($this->dataForm['global_search'])) {
             $this->page = 1;
+            // Store search term in session for persistence
+            $_SESSION['search_name'] = $this->dataForm['search_name'];
             $listAccessLevels->listSearchAccessLevels($this->page, $this->dataForm['search_name']);
             $this->data['form'] = $this->dataForm;
-        } elseif ((!empty($this->searchName)) or (!empty($this->searchEmail))) {
+        }
+        // Check if search is from the regular search form
+        elseif (!empty($this->dataForm['SendSearchAccessLevels'])) {
+            $this->page = 1;
+            $_SESSION['search_name'] = $this->dataForm['search_name'];
+            $listAccessLevels->listSearchAccessLevels($this->page, $this->dataForm['search_name']);
+            $this->data['form'] = $this->dataForm;
+        } 
+        // Check for existing search parameters
+        elseif ((!empty($this->searchName))) {
             $listAccessLevels->listSearchAccessLevels($this->page, $this->searchName);
             $this->data['form']['search_name'] = $this->searchName;
-        } else {
+        } 
+        // Default list without search
+        else {
             $listAccessLevels->listAccessLevels($this->page);
         }
 

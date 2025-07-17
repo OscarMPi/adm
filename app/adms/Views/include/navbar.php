@@ -9,14 +9,26 @@
       </div>
       <div class="container-fluid p-0">
         <button id="tour-fullwidth" type="button" class="btn btn-default btn-toggle-fullwidth"><i class="ti-menu"></i></button>
-        <form class="form-inline search-form mr-auto d-none d-sm-block">
+        
+        <!-- Modified search form to integrate with listAccessLevels search functionality -->
+        <form class="form-inline search-form mr-auto d-none d-sm-block" method="POST" action="<?= URLADM; ?>list-access-levels/index">
           <div class="input-group">
-            <input type="text" value="" class="form-control" placeholder="Search dashboard...">
+            <?php
+            $search_name = "";
+            if (isset($_SESSION['search_name'])) {
+                $search_name = $_SESSION['search_name'];
+            }
+            ?>
+            <input type="text" name="search_name" class="form-control" placeholder="Pesquisar ..." value="<?php echo $search_name; ?>">
             <div class="input-group-append">
-              <button type="button" class="btn"><i class="fa fa-search"></i></button>
+              <button type="submit" name="SendSearchAccessLevels" value="Pesquisar" class="btn"><i class="fa fa-search"></i></button>
             </div>
+            
+            <!-- Hidden fields to maintain compatibility with existing search function -->
+            <input type="hidden" name="global_search" value="1">
           </div>
         </form>
+        
         <div id="navbar-menu">
           <ul class="nav navbar-nav align-items-center">
             <li class="nav-item">
