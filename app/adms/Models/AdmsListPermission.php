@@ -36,12 +36,6 @@ class AdmsListPermission
     /** @var string|null $page Recebe a páginação */
     private string|null $resultPg;
 
-    /** @var string|null $searchName Recebe o nome da página para pesquisa */
-    private string|null $searchName;
-
-    /** @var string|null $searchNameValue Recebe o valor formatado para pesquisa */
-    private string|null $searchNameValue;
-
     /**
      * @return bool Retorna true quando executar o processo com sucesso e false quando houver erro
      */

@@ -25,7 +25,7 @@ class AdmsPagination
     /** @var string|null $parseString Recebe a parseString*/
     private string|null $parseString;
     /** @var array $resultBd Recebe o resultado que vem do banco de dados*/
-    private array $resultBd = []; // Initialize as empty array by default
+    private array $resultBd;
     /** @var string|null $result Recebe o resultado TRUE ou FALSE*/
     private string|null $result;
     /** @var integer $totalPages Recebe o total de paginas*/
@@ -86,23 +86,10 @@ class AdmsPagination
     {
         $this->query = (string) $query;
         $this->parseString = (string) $parseString;
-        
-        // Initialize resultBd as empty array before making the query
-        $this->resultBd = [];
-        
         $count = new \App\adms\Models\helper\AdmsRead();
         $count->fullRead($this->query, $this->parseString);
-        
-        // Check if the result is not null before assigning
-        $result = $count->getResult();
-        if ($result !== null && is_array($result) && !empty($result)) {
-            $this->resultBd = $result;
-            $this->pageInstruction();
-        } else {
-            // Set default value for empty results
-            $this->resultBd = [['num_result' => 0]];
-            $this->result = 0;
-        }
+        $this->resultBd = $count->getResult();
+        $this->pageInstruction();
     }
 
     /**
@@ -112,8 +99,7 @@ class AdmsPagination
      */
     private function pageInstruction(): void
     {
-        // Check if resultBd is set and has the required data
-        if (isset($this->resultBd[0]['num_result']) && $this->resultBd[0]['num_result'] > 0) {
+        if (!$this->resultBd[0]['num_result'] == 0) {
             $this->totalPages = (int) ceil($this->resultBd[0]['num_result'] / $this->limitResult);
             if ($this->totalPages >= $this->page) {
                 $this->layoutPagination();

@@ -101,7 +101,7 @@ class AdmsListAccessLevels
      * @param string|null $search_name
      * @return void
      */
-    public function listSearchAccessLevels(int $page = null, string|null $search_name = null):void
+    public function listSearchAccessLevels(int $page = null, string|null $search_name):void
     {
         $this->page = (int) $page ? $page : 1;
         $this->searchName = trim($search_name);
